@@ -1,0 +1,94 @@
+import React, { Component, Fragment } from 'react'
+
+import './App.css'
+
+import Game from './components/Game'
+import Header from './components/Header'
+import StopGame from './components/StopGame'
+
+class App extends Component {
+  state = {
+    playerScore1: 0,
+    playerScore2: 0,
+    actualPlayer: 1,
+    maxRounds: 4,
+    actualRound: 1,
+    instruction: true,
+  }
+
+  endGame = (actualRound, maxRounds) =>
+    !(actualRound < maxRounds) ? <p>Partie fini !</p> : ''
+
+  addScore = (player, score) => {
+    console.log(player, score)
+    if (player === 'player1')
+      score !== 7
+        ? this.setState({ playerScore1: this.state.playerScore1 + score })
+        : this.setState({
+            playerScore1: 0,
+            actualPlayer: 2,
+            actualRound: this.state.actualRound + 1,
+          })
+    else
+      score !== 7
+        ? this.setState({ playerScore2: this.state.playerScore2 + score })
+        : this.setState({
+            playerScore2: 0,
+            actualPlayer: 1,
+            actualRound: this.state.actualRound + 1,
+          })
+  }
+
+  passTheTurn = (player) =>
+    player === 'player1'
+      ? this.setState({
+          actualPlayer: 2,
+          actualRound: this.state.actualRound + 1,
+        })
+      : this.setState({
+          actualPlayer: 1,
+          actualRound: this.state.actualRound + 1,
+        })
+
+  render() {
+    if (this.state.instruction) {
+      alert(
+        "Règles:\n  2 joueurs\n  2 dés\nLe premier joueur lance les deux dés : tant qu'il ne fait pas sept, il peut relancer les dés et son score s'additionne.\nLe joueur peut aussi décider de s'arrêter.\nS'il fait sept, son score passe à zéro et son tour s'arrête.\nUne fois que le premier joueur a terminé (s'il s'arrête ou qu'il a fait un sept), c'est au tour du second joueur.\nÀ la fin de la manche, le joueur avec le plus grand score gagne."
+      )
+      this.setState({ instruction: false })
+    }
+    const player = this.state.actualPlayer === 1 ? 'player1' : 'player2'
+    const winner =
+      this.state.playerScore1 > this.state.playerScore2
+        ? 'Joueur 1'
+        : 'Joueur 2'
+    const winnerScore =
+      winner === 'Joueur 1' ? this.state.playerScore1 : this.state.playerScore2
+    const playGame = (
+      <Game
+        actualPlayer={this.state.actualPlayer}
+        playerSelected={player}
+        addScore={this.addScore}
+        passTurn={this.passTheTurn}
+        actualRound={this.state.actualRound}
+        maxRounds={this.state.maxRounds}
+      />
+    )
+
+    const stopGame = <StopGame winner={winner} winnerScore={winnerScore} />
+
+    const continueOrStop =
+      this.state.actualRound <= this.state.maxRounds ? playGame : stopGame
+    return (
+      <Fragment>
+        <Header
+          p1score={this.state.playerScore1}
+          p2score={this.state.playerScore2}
+        />
+        {continueOrStop}
+      </Fragment>
+    )
+  }
+}
+
+export default App
