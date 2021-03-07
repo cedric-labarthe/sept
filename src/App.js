@@ -1,17 +1,20 @@
 import React, { Component, Fragment } from 'react'
 
+// Import de la feuille de style
 import './App.css'
 
+//Import de components
 import Game from './components/Game'
 import Header from './components/Header'
 import StopGame from './components/StopGame'
+import Footer from './components/Footer'
 
 class App extends Component {
   state = {
     playerScore1: 0,
     playerScore2: 0,
     actualPlayer: 1,
-    maxRounds: 4,
+    maxRounds: 6,
     actualRound: 1,
     instruction: true,
   }
@@ -49,21 +52,29 @@ class App extends Component {
           actualPlayer: 1,
           actualRound: this.state.actualRound + 1,
         })
-
-  render() {
+  componentDidMount() {
     if (this.state.instruction) {
       alert(
-        "Règles:\n  2 joueurs\n  2 dés\nLe premier joueur lance les deux dés : tant qu'il ne fait pas sept, il peut relancer les dés et son score s'additionne.\nLe joueur peut aussi décider de s'arrêter.\nS'il fait sept, son score passe à zéro et son tour s'arrête.\nUne fois que le premier joueur a terminé (s'il s'arrête ou qu'il a fait un sept), c'est au tour du second joueur.\nÀ la fin de la manche, le joueur avec le plus grand score gagne."
+        "Règles:\n\n  - 2 joueurs\n  - 2 dés\n\nLe premier joueur lance les deux dés : tant qu'il ne fait pas sept, il peut relancer les dés et son score s'additionne.\nLe joueur peut aussi décider de s'arrêter.\nS'il fait sept, son score passe à zéro et son tour s'arrête.\nUne fois que le premier joueur a terminé (s'il s'arrête ou qu'il a fait un sept), c'est au tour du second joueur.\nÀ la fin de la manche, le joueur avec le plus grand score gagne."
       )
       this.setState({ instruction: false })
     }
+  }
+
+  render() {
     const player = this.state.actualPlayer === 1 ? 'player1' : 'player2'
     const winner =
-      this.state.playerScore1 > this.state.playerScore2
+      this.state.playerScore1 === this.state.playerScore2
+        ? 'Egalité'
+        : this.state.playerScore1 > this.state.playerScore2
         ? 'Joueur 1'
         : 'Joueur 2'
     const winnerScore =
-      winner === 'Joueur 1' ? this.state.playerScore1 : this.state.playerScore2
+      winner === 'Egalité'
+        ? this.state.playerScore1
+        : winner === 'Joueur 1'
+        ? this.state.playerScore1
+        : this.state.playerScore2
     const playGame = (
       <Game
         actualPlayer={this.state.actualPlayer}
@@ -85,7 +96,7 @@ class App extends Component {
           p1score={this.state.playerScore1}
           p2score={this.state.playerScore2}
         />
-        {continueOrStop}
+        {continueOrStop} <Footer />
       </Fragment>
     )
   }

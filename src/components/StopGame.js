@@ -1,9 +1,11 @@
 const StopGame = (props) => {
+  const message =
+    props.winner === 'Egalité' ? props.winner : `Le gagnant est ${props.winner}`
   return (
     <fieldset>
       <p>Le jeu est fini !</p>
       <p>
-        Le gagnant est {props.winner} avec {props.winnerScore} points !!!
+        {message} avec {props.winnerScore} points !!!
       </p>
     </fieldset>
   )

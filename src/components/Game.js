@@ -15,6 +15,7 @@ const Game = (props) => {
       'color:green',
       'color: purple; font-size: 20px'
     )
+
     props.addScore(props.playerSelected, scoreResult)
     alert(
       `Tirage :  ${firstRoll} + ${secondRoll} = ${scoreResult} \n ${
