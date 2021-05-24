@@ -14,6 +14,7 @@
 Lancez les dés, mais évitez de faire un 7!
 Le joueur avec le plus grand score après 6 manches gagne.
 
+![jeu de sept](https://i.imgur.com/puTbph8.png)
 ## Author
 
 👤 **Cédric La Barthe**
